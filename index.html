@@ -1,1 +1,182 @@
+<!doctype html>
 
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>Audix CRM</title>
+
+<style>
+
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+text-align: center;
+padding: 22vh 28px 40px;
+margin: 0;
+background: #ffffff;
+color: #111111;
+}
+
+h1 {
+font-size: 32px;
+margin-bottom: 8px;
+}
+
+h2 {
+font-size: 20px;
+margin-bottom: 24px;
+font-weight: 500;
+}
+
+p {
+font-size: 17px;
+line-height: 1.45;
+max-width: 420px;
+margin: 0 auto 18px;
+}
+
+.instructions {
+text-align: left;
+max-width: 400px;
+margin: 25px auto;
+font-size: 17px;
+line-height: 1.6;
+}
+
+button,
+a.button {
+display: inline-block;
+border: 0;
+padding: 16px 28px;
+background: #000000;
+color: #ffffff;
+text-decoration: none;
+border-radius: 12px;
+font-size: 18px;
+font-weight: 600;
+cursor: pointer;
+margin-top: 10px;
+}
+
+.secondary {
+background: #eeeeee;
+color: #111111;
+margin-top: 16px;
+}
+
+#launchMode {
+display: none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- INSTALL MODE -->
+
+<div id="installMode">
+
+<h1>Audix CRM</h1>
+
+<h2>Install Sales Rep Enablement</h2>
+
+<p>
+Add Audix CRM to your iPhone Home Screen.
+</p>
+
+<div class="instructions">
+
+1. Tap the Safari <strong>Share</strong> button.<br>
+2. Select <strong>Add to Home Screen</strong>.<br>
+3. Turn <strong>Open as Web App OFF</strong> if shown.<br>
+4. Name it <strong>Audix CRM</strong>.<br>
+5. Tap <strong>Add</strong>.<br>
+6. Return to Safari and tap <strong>Complete CRM Installation</strong>.
+
+</div>
+
+<button onclick="completeInstallation()">
+Complete CRM Installation
+</button>
+
+</div>
+
+<!-- LAUNCH MODE -->
+
+<div id="launchMode">
+
+<h1>Audix CRM</h1>
+
+<h2>Sales Rep Enablement</h2>
+
+<p>
+Tap below to open the CRM.
+</p>
+
+<a
+class="button"
+href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_gWc5MTPWUOMWSkTnmJUvJNgzPxS9IlMvCQras4UtmdUOEpQVjZXMU42TkVDOTNYTDBVTFNEODZPUi4u"
+target="_blank"
+rel="noopener noreferrer">
+Open CRM
+</a>
+
+<br>
+
+<button
+class="secondary"
+onclick="resetInstall()">
+Reset Installation
+</button>
+
+</div>
+
+<script>
+
+function completeInstallation() {
+
+localStorage.setItem("audixCRMInstalled", "yes");
+
+document.getElementById("installMode").style.display = "none";
+document.getElementById("launchMode").style.display = "block";
+
+}
+
+function resetInstall() {
+
+localStorage.removeItem("audixCRMInstalled");
+
+window.location.reload();
+
+}
+
+window.addEventListener("load", function () {
+
+const installed =
+localStorage.getItem("audixCRMInstalled");
+
+if (installed === "yes") {
+
+document.getElementById("installMode").style.display = "none";
+document.getElementById("launchMode").style.display = "block";
+
+} else {
+
+document.getElementById("installMode").style.display = "block";
+document.getElementById("launchMode").style.display = "none";
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
