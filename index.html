@@ -141,7 +141,7 @@ Reset Installation
 
 function completeInstallation() {
 
-localStorage.setItem("audixCRMInstalled", "yes");
+localStorage.setItem("audixCRMInstalledTest", "yes");
 
 document.getElementById("installMode").style.display = "none";
 document.getElementById("launchMode").style.display = "block";
@@ -150,7 +150,7 @@ document.getElementById("launchMode").style.display = "block";
 
 function resetInstall() {
 
-localStorage.removeItem("audixCRMInstalled");
+localStorage.removeItem("audixCRMInstalledTest");
 
 window.location.reload();
 
@@ -159,7 +159,7 @@ window.location.reload();
 window.addEventListener("load", function () {
 
 const installed =
-localStorage.getItem("audixCRMInstalled");
+localStorage.getItem("audixCRMInstalledTest");
 
 if (installed === "yes") {
 
