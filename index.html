@@ -15,7 +15,7 @@ content="width=device-width, initial-scale=1, viewport-fit=cover">
 body {
 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 text-align: center;
-padding: 22vh 28px 40px;
+padding: 18vh 28px 40px;
 margin: 0;
 background: #ffffff;
 color: #111111;
@@ -47,6 +47,15 @@ font-size: 17px;
 line-height: 1.6;
 }
 
+select {
+width: 100%;
+max-width: 360px;
+padding: 14px;
+font-size: 18px;
+border-radius: 10px;
+margin: 10px auto 18px;
+}
+
 button,
 a.button {
 display: inline-block;
@@ -62,25 +71,14 @@ cursor: pointer;
 margin-top: 10px;
 }
 
-.photo-button {
-display: inline-block;
-padding: 16px 28px;
-background: #000000;
-color: #ffffff;
-text-decoration: none;
-border-radius: 12px;
-font-size: 18px;
-font-weight: 600;
-margin-top: 10px;
-}
-
 .secondary {
 background: #eeeeee;
 color: #111111;
 margin-top: 16px;
 }
 
-#launchMode {
+#launchMode,
+#photoMode {
 display: none;
 }
 
@@ -109,9 +107,29 @@ Add Audix CRM to your iPhone Home Screen.
 3. Turn <strong>Open as Web App OFF</strong> if shown.<br>
 4. Name it <strong>Audix CRM</strong>.<br>
 5. Tap <strong>Add</strong>.<br>
-6. Return to Safari and tap <strong>Complete CRM Installation</strong>.
+6. Return to Safari.<br>
+7. Select your name below.<br>
+8. Tap <strong>Complete CRM Installation</strong>.
 
 </div>
+
+<select id="repSelect">
+
+<option value="">
+Select Sales Rep
+</option>
+
+<option value="Steve Young">
+Steve Young
+</option>
+
+<option value="Lofty Whitaker">
+Lofty Whitaker
+</option>
+
+</select>
+
+<br>
 
 <button onclick="completeInstallation()">
 Complete CRM Installation
@@ -119,13 +137,16 @@ Complete CRM Installation
 
 </div>
 
-<!-- LAUNCH MODE -->
+
+<!-- NORMAL LAUNCH MODE -->
 
 <div id="launchMode">
 
 <h1>Audix CRM</h1>
 
 <h2>Sales Rep Enablement</h2>
+
+<p id="repDisplay"></p>
 
 <p>
 Tap below to open the CRM.
@@ -141,13 +162,9 @@ Open CRM
 
 <br><br>
 
-<a
-class="photo-button"
-href="https://videndumplc-my.sharepoint.com/:f:/g/personal/steve_young_videndum_com/IgB2mu96t5PTQ7F0_7jmQyJKAQEPqp44gBPQPlR8sR5mVf0"
-target="_blank"
-rel="noopener noreferrer">
+<button onclick="openPhotos()">
 Add Photos
-</a>
+</button>
 
 <br><br>
 
@@ -159,43 +176,200 @@ Reset Installation
 
 </div>
 
+
+<!-- PHOTO ENTRY MODE -->
+
+<div id="photoMode">
+
+<h1>Audix CRM</h1>
+
+<h2>Add Activity Photos</h2>
+
+<p id="photoRepDisplay"></p>
+
+<p>
+Tap below to upload your photos.
+</p>
+
+<button onclick="openPhotos()">
+Add Photos
+</button>
+
+<br><br>
+
+<a
+class="button secondary"
+href="./">
+Return to CRM
+</a>
+
+</div>
+
+
 <script>
+
+const photoLinks = {
+
+"Steve Young":
+"https://videndumplc-my.sharepoint.com/:f:/g/personal/steve_young_videndum_com/IgDnFrVfu68cRI1WOWPskICqAVUGEuVl6uKwAxYkfWPW5l0",
+
+"Lofty Whitaker":
+"https://videndumplc-my.sharepoint.com/:f:/g/personal/steve_young_videndum_com/IgB2mu96t5PTQ7F0_7jmQyJKAQEPqp44gBPQPlR8sR5mVf0"
+
+};
+
 
 function completeInstallation() {
 
-localStorage.setItem("audixCRMInstalledTest", "yes");
+const rep =
+document.getElementById("repSelect").value;
 
-document.getElementById("installMode").style.display = "none";
-document.getElementById("launchMode").style.display = "block";
+if (!rep) {
+
+alert("Please select your name.");
+
+return;
 
 }
+
+localStorage.setItem(
+"audixCRMRepTest",
+rep
+);
+
+localStorage.setItem(
+"audixCRMInstalledTest",
+"yes"
+);
+
+showCorrectMode();
+
+}
+
+
+function openPhotos() {
+
+const rep =
+localStorage.getItem("audixCRMRepTest");
+
+const url =
+photoLinks[rep];
+
+if (!url) {
+
+alert(
+"Photo destination not configured. Please reset the installation and select your name."
+);
+
+return;
+
+}
+
+window.open(
+url,
+"_blank",
+"noopener,noreferrer"
+);
+
+}
+
 
 function resetInstall() {
 
-localStorage.removeItem("audixCRMInstalledTest");
+localStorage.removeItem(
+"audixCRMInstalledTest"
+);
 
-window.location.reload();
+localStorage.removeItem(
+"audixCRMRepTest"
+);
+
+window.location.href = "./";
 
 }
 
-window.addEventListener("load", function () {
+
+function showCorrectMode() {
 
 const installed =
-localStorage.getItem("audixCRMInstalledTest");
+localStorage.getItem(
+"audixCRMInstalledTest"
+);
 
-if (installed === "yes") {
+const rep =
+localStorage.getItem(
+"audixCRMRepTest"
+);
 
-document.getElementById("installMode").style.display = "none";
-document.getElementById("launchMode").style.display = "block";
+const params =
+new URLSearchParams(
+window.location.search
+);
 
-} else {
+const photoRequest =
+params.get("photos") === "1";
 
-document.getElementById("installMode").style.display = "block";
-document.getElementById("launchMode").style.display = "none";
+
+document.getElementById(
+"installMode"
+).style.display = "none";
+
+document.getElementById(
+"launchMode"
+).style.display = "none";
+
+document.getElementById(
+"photoMode"
+).style.display = "none";
+
+
+if (
+installed !== "yes" ||
+!rep ||
+!photoLinks[rep]
+) {
+
+document.getElementById(
+"installMode"
+).style.display = "block";
+
+return;
 
 }
 
-});
+
+if (photoRequest) {
+
+document.getElementById(
+"photoRepDisplay"
+).textContent =
+"Sales Rep: " + rep;
+
+document.getElementById(
+"photoMode"
+).style.display = "block";
+
+return;
+
+}
+
+
+document.getElementById(
+"repDisplay"
+).textContent =
+"Sales Rep: " + rep;
+
+document.getElementById(
+"launchMode"
+).style.display = "block";
+
+}
+
+
+window.addEventListener(
+"load",
+showCorrectMode
+);
 
 </script>
 
