@@ -202,13 +202,9 @@ Complete CRM Installation
 Tap below to open the CRM.
 </p>
 
-<a
-class="button"
-href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_gWc5MTPWUOMWSkTnmJUvJNgzPxS9IlMvCQras4UtmdUOEpQVjZXMU42TkVDOTNYTDBVTFNEODZPUi4u"
-target="_blank"
-rel="noopener noreferrer">
+<button onclick="openCRM()">
 Open CRM
-</a>
+</button>
 
 <br><br>
 
@@ -335,7 +331,41 @@ showCorrectMode();
 
 }
 
+function openCRM() {
 
+const rep =
+localStorage.getItem("audixCRMRepTest");
+
+if (!rep) {
+
+alert(
+"Sales Rep not configured. Please reset the installation and select your name."
+);
+
+return;
+
+}
+
+const baseFormUrl =
+"https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_gWc5MTPWUOMWSkTnmJUvJNgzPxS9IlMvCQras4UtmdUOEpQVjZXMU42TkVDOTNYTDBVTFNEODZPUi4u";
+
+const salesRepQuestion =
+"r1aa80e7ed15d4a4ba95743750455b918";
+
+const crmUrl =
+baseFormUrl +
+"&" +
+salesRepQuestion +
+"=" +
+encodeURIComponent(JSON.stringify(rep));
+
+window.open(
+crmUrl,
+"_blank",
+"noopener,noreferrer"
+);
+
+}
 function openPhotos() {
 
 const rep =
